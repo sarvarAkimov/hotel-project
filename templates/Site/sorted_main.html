@@ -1,0 +1,234 @@
+{% extends 'Site/base.html' %}
+{% load static %}
+{% block content %}
+ 
+  <div class="umumiy">
+    <div class="fixed-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </div>
+    <nav id="qwer1">
+      <div class="navbar ">
+        <div class="brend">
+          <svg width="30" height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.0833 22.9167H24.9166V11.5833H16.4166V22.9167H19.25V14.4167H22.0833V22.9167ZM2.24998 22.9167V1.66667C2.24998 1.29094 2.39924 0.930609 2.66491 0.664932C2.93059 0.399255 3.29092 0.25 3.66665 0.25H23.5C23.8757 0.25 24.236 0.399255 24.5017 0.664932C24.7674 0.930609 24.9166 1.29094 24.9166 1.66667V8.75H27.75V22.9167H29.1666V25.75H0.833313V22.9167H2.24998ZM7.91665 11.5833V14.4167H10.75V11.5833H7.91665ZM7.91665 17.25V20.0833H10.75V17.25H7.91665ZM7.91665 5.91667V8.75H10.75V5.91667H7.91665Z" fill="black"/>
+          </svg>
+            
+          BookHotels
+        </div>
+        <div class="links">
+          <ul>
+            <li>Asosiy</li>
+            <li>Mehmonxona</li>
+            <li>Tabiat</li>
+            <li>Kontack</li>
+          </ul>
+        
+        </div>
+        <div class="login">
+          <button><a href="{% url 'signup' %}">Login</a></button>
+        </div>
+      </div>
+    </nav>
+    <div class="nav_img">
+      <img src="{% static 'img/Rectangle 28.png' %}" class="nav_imgs" alt="">
+      <div class="main_card " id="qwer">
+  
+      </div>
+    </div>
+  
+    <section>
+      <div class="blok_1" id="block">
+        <div class="royxat">
+          <form method="GET">
+              <h2>
+                Hususiyatlar bo`yicha tanlash
+              </h2>
+              <hr>
+              <h2>
+                Mehmonxona turi
+              </h2>
+              {{ filter.form.types }}
+              <br>
+              <hr>
+              <h2>Narx oralig`i</h2>
+              <input type="text" placeholder="dan">
+              <input type="text" placeholder="gacha">
+              <br> <br>
+              <hr>
+      
+              <h2>Reyting</h2>
+              {{ filter.form.rating }}
+              <br>
+              <hr>
+      
+              <h2>Markazdan masofa</h2>
+              {{ filter.form.distance }}
+              <br>
+            
+              <hr>
+      
+              <h2>Baxolar bo`yicha</h2>
+              
+              {{ filter.form.grade }}
+              <br>
+              <hr>
+      
+              <h2>Qo`shimcha hizmatlar</h2>
+              {{ filter.form.additional }}
+              <br>
+              <hr>
+      
+              <h2>Xonadagi qulayliklar</h2>
+              {{ filter.form.room_comforts }}
+              <br>
+              <hr>
+      
+              <h2>Maxsus qulayliklar</h2>
+              {{ filter.form.comforts_list }}
+              <br>
+              <button type="submit">Qidirish</button>
+          </form>
+          
+          
+  
+        </div>
+      </div>
+      <div class="blok_2">
+        <div class="item-1">
+          <h1 class="h1-1">Sizning so`rovingiz bo`yicha topilgan  natijalar</h1>
+          <table border="1px">
+              <tr>
+                <td><a href="{% url 'main' %}"> Orqaga </a></td>
+                <td>O`sish tartibida </td>
+                <td>Top </td>
+                <td>Button </td>
+              </tr>
+          </table>
+
+          {% for object in filter.qs|dictsortreversed:"average" %}
+          
+              <div class="item-2">
+                <div class="items-1">
+                  <div class="items-1">
+                    <img src="{{ object.image.url }}" alt="">
+                  </div>
+                </div>
+                <div class="items-2">
+                  <a href="{% url 'hotel-detail' object.pk %}"><h1>{{ object.name }}</h1></a>
+                  {% for rating in object.rating.all %}{{ rating }}{% endfor %}                 
+                  <p>{{ object.about }}</p>
+                  <!-- <button type="submit">
+                    Submit
+                  </button> -->
+                  {% comment %} <a href="{% url 'review' %}" class="button">Submit</a> {% endcomment %}
+                  <div class="icon">
+                   
+                      <h1 class='count' hx-post="{% url 'count' pk=object.id %}" hx-trigger='load' hx-target='this'></h1>  
+                    
+                    
+                    <svg width="32" height="34" viewBox="0 0 32 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M30.6055 17.8477C31.2617 16.9805 31.625 15.918 31.625 14.8125C31.625 13.0586 30.6445 11.3985 29.0664 10.4727C28.6601 10.2344 28.1976 10.109 27.7266 10.1094H18.3594L18.5938 5.30862C18.6484 4.14846 18.2383 3.0469 17.4414 2.20706C17.0503 1.79311 16.5785 1.46375 16.0551 1.23935C15.5318 1.01494 14.9679 0.900254 14.3984 0.902373C12.3672 0.902373 10.5703 2.26956 10.0312 4.22659L6.67578 16.375H1.625C0.933594 16.375 0.375 16.9336 0.375 17.625V31.8438C0.375 32.5352 0.933594 33.0938 1.625 33.0938H25.1133C25.4727 33.0938 25.8242 33.0234 26.1484 32.8828C28.0078 32.0898 29.207 30.2734 29.207 28.2578C29.207 27.7656 29.1367 27.2813 28.9961 26.8125C29.6523 25.9453 30.0156 24.8828 30.0156 23.7774C30.0156 23.2852 29.9453 22.8008 29.8047 22.332C30.4609 21.4649 30.8242 20.4024 30.8242 19.2969C30.8164 18.8047 30.7461 18.3164 30.6055 17.8477ZM3.1875 30.2813V19.1875H6.35156V30.2813H3.1875ZM28.0469 16.4922L27.1914 17.2344L27.7344 18.2266C27.9133 18.5534 28.006 18.9204 28.0039 19.293C28.0039 19.9375 27.7227 20.5508 27.2383 20.9727L26.3828 21.7149L26.9258 22.707C27.1047 23.0339 27.1974 23.4009 27.1953 23.7735C27.1953 24.418 26.9141 25.0313 26.4297 25.4531L25.5742 26.1953L26.1172 27.1875C26.2961 27.5143 26.3888 27.8813 26.3867 28.2539C26.3867 29.1289 25.8711 29.918 25.0742 30.2774H8.85156V19.0625L12.7383 4.98049C12.8385 4.61956 13.0536 4.30113 13.3511 4.07345C13.6486 3.84577 14.0121 3.72126 14.3867 3.71878C14.6836 3.71878 14.9766 3.80471 15.2109 3.9805C15.5977 4.26956 15.8047 4.70706 15.7812 5.1719L15.4062 12.9219H27.6875C28.3828 13.3477 28.8125 14.0664 28.8125 14.8125C28.8125 15.4571 28.5312 16.0664 28.0469 16.4922Z" fill="black"/>
+                    </svg>
+                    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16.9999 0.333313C7.80992 0.333313 0.333252 6.31498 0.333252 13.6666C0.333252 18.5133 3.49659 22.86 8.66659 25.2233V33.6666L17.5666 26.9916C26.4949 26.7533 33.6666 20.8666 33.6666 13.6666C33.6666 6.31498 26.1899 0.333313 16.9999 0.333313ZM16.9999 23.6666H16.4449L11.9999 27V22.9716L10.9316 22.56C6.44992 20.835 3.66659 17.4266 3.66659 13.6666C3.66659 8.15165 9.64825 3.66665 16.9999 3.66665C24.3516 3.66665 30.3333 8.15165 30.3333 13.6666C30.3333 19.1816 24.3516 23.6666 16.9999 23.6666Z" fill="black"/>
+                    </svg>
+                      
+                      
+                  </div>
+                </div>
+                
+              </div>
+          {% endfor %}
+          
+         
+         
+        </div>
+      </div>
+    </section>
+   
+  </div>
+
+  <footer>
+    <div class="footer_flex">
+      <div class="item">
+        <div class="brend">
+          <svg width="30" style="background-color: #fff;" height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.0833 22.9167H24.9166V11.5833H16.4166V22.9167H19.25V14.4167H22.0833V22.9167ZM2.24998 22.9167V1.66667C2.24998 1.29094 2.39924 0.930609 2.66491 0.664932C2.93059 0.399255 3.29092 0.25 3.66665 0.25H23.5C23.8757 0.25 24.236 0.399255 24.5017 0.664932C24.7674 0.930609 24.9166 1.29094 24.9166 1.66667V8.75H27.75V22.9167H29.1666V25.75H0.833313V22.9167H2.24998ZM7.91665 11.5833V14.4167H10.75V11.5833H7.91665ZM7.91665 17.25V20.0833H10.75V17.25H7.91665ZM7.91665 5.91667V8.75H10.75V5.91667H7.91665Z" fill="black"/>
+          </svg>
+            
+          BookHotels
+          <p>
+            We provide our best service <br> to our clients.
+          </p>
+        </div>
+        <div class="icon">
+          <ul>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+              </svg>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+              </svg>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+              </svg>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+              </svg>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <div class="footer_home">
+          <ul class="footer_link">
+            <h2>Home</h2>
+            <li>Asosiy</li>
+            <li>Mehmonxona</li>
+            <li>Tabiat</li>
+            <li>Kontack</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <div class="footer_Support">
+          <ul class="footer_link">
+            <h2>Support</h2>
+            <li>Asosiy</li>
+            <li>Mehmonxona</li>
+            <li>Tabiat</li>
+            <li>Kontack</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <div class="footer_Get">
+          <ul class="footer_link">
+            <h2>Get in touch</h2>
+            <li>Asosiy</li>
+            <li>Mehmonxona</li>
+            <li>Tabiat</li>
+            <li>Kontack</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+  </script>
+
+
+{% endblock content %}
