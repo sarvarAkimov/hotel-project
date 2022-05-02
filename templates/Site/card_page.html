@@ -58,8 +58,9 @@
                       rea location. Very good brekfast. The hotel is nice, but for 4 star hotel they should…
                       
                       See all 31 reviews
-                      {% for comment in comments.review_text %}
-                        {{ comment }}
+                      {% for comment in comments %}
+                        <b><p>{{ comment.user }}:</b> {{ comment.review_text }}</p>
+                        
                       {% endfor %}
                     </p>
                 </div>

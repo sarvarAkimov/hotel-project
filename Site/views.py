@@ -28,6 +28,7 @@ def hotel_details(request, pk):
     post.viewed.add(user)
     post.viewed_count = post.viewed.count()
     post.save()
+    comments = post.grade.all
     if request.method == "POST":
         form = AddGrading(request.POST)
         if form.is_valid():
@@ -38,18 +39,17 @@ def hotel_details(request, pk):
             post.save()
             hotel.grade.add(post)
             return redirect('hotel-detail', pk=pk)
-    return render(request, 'Site/card_page.html', {'post': post, 'form':form})
+    return render(request, 'Site/card_page.html', {'post': post, 'form':form, 'comments': comments})
 
 
 
-def count(request,pk):
+def count(request, pk):
     hotel = Hotel.objects.get(id=pk)
     all_hotels_grade = hotel.grade.all()
     average_stars  = 0
     for one_hotels_grade in all_hotels_grade:
         average_stars += int(one_hotels_grade.grade)
-    try: 
-
+    try:
         average_score = round(average_stars/len(all_hotels_grade), 1)*2
         hotel.average = average_score
         hotel.save()
