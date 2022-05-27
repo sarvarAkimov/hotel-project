@@ -15,7 +15,7 @@ for room in all_rooms:
 
 class AvailibiltyForm(forms.Form):
     room = forms.ChoiceField(choices=ROOMS, required=True)
-    check_in = forms.DateField(input_formats=["%d-%m-%Y"], required=True, widget=forms.DateField)
+    check_in = forms.DateField(input_formats=["%d-%m-%Y"], required=True)
     check_out = forms.DateField(input_formats=["%d-%m-%Y"], required=True)
 
 
