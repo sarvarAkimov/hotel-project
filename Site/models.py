@@ -1,4 +1,5 @@
 
+from tabnanny import check
 from tkinter import N
 from django.db import models
 
@@ -109,6 +110,28 @@ class Grading(models.Model):
 
     def __str__(self):
         return f"{self.grade}"
+
+# 3
+# Hona ZAKAZ qilish
+class Room(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(verbose_name='hona nomi', max_length=150)
+    capacity = models.IntegerField(verbose_name="hona sig'imi")
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Booking(models.Model):
+    user = models.ForeignKey(People, on_delete=models.CASCADE, verbose_name='buyurtmachi')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name='hona')
+    check_in = models.DateField(verbose_name='...dan')
+    check_out = models.DateField(verbose_name='...gacha')
+
+    def __str__(self):
+        return f"{self.user} booked room-{self.room}"
+
+
 
 
 
