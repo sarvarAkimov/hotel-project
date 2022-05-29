@@ -14,9 +14,12 @@ for room in all_rooms:
     ROOMS.append([room.name, room.name])
 
 class AvailibiltyForm(forms.Form):
-    room = forms.ChoiceField(choices=ROOMS, required=True)
+    # room = forms.ChoiceField(choices=ROOMS, required=True)
     check_in = forms.DateField(input_formats=["%d-%m-%Y"], required=True)
     check_out = forms.DateField(input_formats=["%d-%m-%Y"], required=True)
+
+class BookRoom(forms.Form):
+    room = forms.ChoiceField(choices=ROOMS, required=True)
 
 
 

@@ -64,7 +64,8 @@ def booking_view(request, pk):
     form = AvailibiltyForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
-        room_list = Room.objects.filter(name=data['room'])
+        hotel = Hotel.objects.get(pk=pk)
+        room_list = hotel.rooms.all()
         avail_rooms = []
         for room in room_list:
             if check_availibilty(room, check_in=data['check_in'], check_out=data['check_out'], pk=pk):
@@ -72,21 +73,23 @@ def booking_view(request, pk):
         
         if len(avail_rooms) > 0:
             otel_room = Hotel.objects.get(pk=pk)
-            roomss = avail_rooms[0]
-            booking = Booking.objects.create(
-                user = request.user,
-                room = roomss,
-                check_in = data['check_in'],
-                check_out = data['check_out'],
-                otel = otel_room
-            )
-            booking.save()
-            booked_hotel_room = Hotel.objects.get(pk=pk)
-            booked_hotel_room.booked_rooms.add(booking)
-            booked_hotel_room.save()
+            print(avail_rooms)
+            # roomss = avail_rooms[0]
+            # booking = Booking.objects.create(
+            #     user = request.user,
+            #     room = roomss,
+            #     check_in = data['check_in'],
+            #     check_out = data['check_out'],
+            #     otel = otel_room
+            # )
+            # booking.save()
+            # booked_hotel_room = Hotel.objects.get(pk=pk)
+            # booked_hotel_room.booked_rooms.add(booking)
+            # booked_hotel_room.save()
 
-            return HttpResponse(booking)
+            return HttpResponse(avail_rooms)
         else:
+            print(avail_rooms)
             return HttpResponse('this room is booked')
 
     return render(request, 'Site/booking_form.html', {'form':form})
