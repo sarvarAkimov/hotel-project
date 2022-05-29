@@ -27,6 +27,8 @@ class Hotel(models.Model):
     average = models.FloatField(verbose_name="o'rtacha baho")
     viewed = models.ManyToManyField(People, blank=True, verbose_name="ko'rilgan")
     viewed_count = models.IntegerField(blank=True, verbose_name="ko'rilgan soni")
+    rooms = models.ManyToManyField('Room', verbose_name='honalar')
+    booked_rooms = models.ManyToManyField('Booking', verbose_name='zakaz honalar', blank=True)
 
 
     def __str__(self):
@@ -69,12 +71,6 @@ class Distance(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-# class Grade(models.Model):
-#     id = models.AutoField(primary_key=True, unique=True)
-#     name = models.CharField(max_length=200)
-
-#     def __str__(self):
-#         return f"{self.name}"
 
 class Additional(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -104,7 +100,6 @@ GRADE = (
 class Grading(models.Model):
     user = models.ForeignKey(People, on_delete=models.CASCADE, verbose_name='foydalanuvchi')
     ide = models.AutoField(primary_key=True, unique=True)
-    otel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Otel nomi')
     review_text = models.TextField(verbose_name='sharh qoldirish')
     grade = models.IntegerField(choices=GRADE, null=True, blank=True, verbose_name='baho')
 
@@ -123,13 +118,16 @@ class Room(models.Model):
 
 
 class Booking(models.Model):
+
     user = models.ForeignKey(People, on_delete=models.CASCADE, verbose_name='buyurtmachi')
     room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name='hona')
     check_in = models.DateField(verbose_name='...dan')
     check_out = models.DateField(verbose_name='...gacha')
+    otel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Otel nomi')
+
 
     def __str__(self):
-        return f"{self.user} booked room-{self.room}"
+        return f"{self.user} booked room-{self.room} in {self.otel}"
 
 
 

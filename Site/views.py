@@ -1,10 +1,8 @@
-from tabnanny import check
-from winreg import CreateKey
+
 from django.shortcuts import redirect, render, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-
 from Site.availibilty import check_availibilty
 from accounts.models import People
 from .models import Hotel, Grading, Room, Booking
@@ -38,7 +36,6 @@ def hotel_details(request, pk):
             post = form.save(commit=False)
             post.user = request.user
             hotel = Hotel.objects.get(pk=pk)
-            post.otel = hotel
             post.save()
             hotel.grade.add(post)
             return redirect('hotel-detail', pk=pk)
@@ -62,25 +59,32 @@ def count(request,pk):
     except ZeroDivisionError:
         return HttpResponse('0')
 
-def booking_view(request):
+
+def booking_view(request, pk):
     form = AvailibiltyForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
         room_list = Room.objects.filter(name=data['room'])
         avail_rooms = []
         for room in room_list:
-            if check_availibilty(room, check_in=data['check_in'], check_out=data['check_out']):
+            if check_availibilty(room, check_in=data['check_in'], check_out=data['check_out'], pk=pk):
                 avail_rooms.append(room)
         
         if len(avail_rooms) > 0:
+            otel_room = Hotel.objects.get(pk=pk)
             roomss = avail_rooms[0]
             booking = Booking.objects.create(
                 user = request.user,
                 room = roomss,
                 check_in = data['check_in'],
-                check_out = data['check_out']
+                check_out = data['check_out'],
+                otel = otel_room
             )
             booking.save()
+            booked_hotel_room = Hotel.objects.get(pk=pk)
+            booked_hotel_room.booked_rooms.add(booking)
+            booked_hotel_room.save()
+
             return HttpResponse(booking)
         else:
             return HttpResponse('this room is booked')
