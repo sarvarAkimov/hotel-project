@@ -1,4 +1,3 @@
-
 from django.shortcuts import redirect, render, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -69,13 +68,10 @@ def booking_view(request, pk):
         room_list = hotel.rooms.all()
         avail_rooms = []
         for room in room_list:
-            if check_availibilty(room, check_in=data['check_in'], check_out=data['check_out'], pk=pk):
+            if check_availibilty(room, check_in=data['check_in'], check_out=data['check_out'], capacity=data['capacity'], pk=pk):
                 avail_rooms.append(room)
         
         if len(avail_rooms) > 0:
-            otel_room = Hotel.objects.get(pk=pk)
-            print(data['check_in'])
-
 
             hotel = request.POST['hotel']
             return render(request, 'Site/rooms.html', {
@@ -110,4 +106,3 @@ def rooms_view(request, pk):
     booked_hotel_room.booked_rooms.add(booking)
     booked_hotel_room.save()
     return redirect('main')
-

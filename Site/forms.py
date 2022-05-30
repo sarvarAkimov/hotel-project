@@ -14,9 +14,9 @@ for room in all_rooms:
     ROOMS.append([room.name, room.name])
 
 class AvailibiltyForm(forms.Form):
-    # room = forms.ChoiceField(choices=ROOMS, required=True)
-    check_in = forms.DateField(input_formats=["%Y-%m-%d"], required=True)
-    check_out = forms.DateField(input_formats=["%Y-%m-%d"], required=True)
+    capacity = forms.IntegerField(required=True)
+    check_in = forms.DateField(required=True, widget=forms.SelectDateWidget)
+    check_out = forms.DateField(required=True, widget=forms.SelectDateWidget)
 
 class BookRoom(forms.Form):
     room = forms.ChoiceField(choices=ROOMS, required=True)
