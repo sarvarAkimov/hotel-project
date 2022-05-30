@@ -1,0 +1,18 @@
+{% extends 'Site/base.html' %}
+{% load static %}
+{% block content %}
+
+
+{% for data in available_rooms %}
+    <form method="post" action="{% url 'rooms_url' pk=data.id %}">
+        {% csrf_token %}
+        {{ from_ }}
+        <input type="hidden" name="from_date" value='{{ from_|date:"Y-m-d" }}'>
+        <input type="hidden" name="to_date" value='{{ to_|date:"Y-m-d" }}'>
+        <input type="hidden" name="hotel" value="{{ hotel }}">
+        <button>{{ data.name }}</button>
+    </form>
+{% endfor %}
+
+
+{% endblock content %}

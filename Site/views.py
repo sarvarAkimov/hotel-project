@@ -62,6 +62,7 @@ def count(request,pk):
 
 def booking_view(request, pk):
     form = AvailibiltyForm(request.POST)
+
     if form.is_valid():
         data = form.cleaned_data
         hotel = Hotel.objects.get(pk=pk)
@@ -73,26 +74,40 @@ def booking_view(request, pk):
         
         if len(avail_rooms) > 0:
             otel_room = Hotel.objects.get(pk=pk)
-            print(avail_rooms)
-            # roomss = avail_rooms[0]
-            # booking = Booking.objects.create(
-            #     user = request.user,
-            #     room = roomss,
-            #     check_in = data['check_in'],
-            #     check_out = data['check_out'],
-            #     otel = otel_room
-            # )
-            # booking.save()
-            # booked_hotel_room = Hotel.objects.get(pk=pk)
-            # booked_hotel_room.booked_rooms.add(booking)
-            # booked_hotel_room.save()
+            print(data['check_in'])
 
-            return HttpResponse(avail_rooms)
+
+            hotel = request.POST['hotel']
+            return render(request, 'Site/rooms.html', {
+                'available_rooms': avail_rooms,
+                'hotel': hotel,
+                'from_': data['check_in'],
+                'to_': data['check_out']
+            })
         else:
             print(avail_rooms)
             return HttpResponse('this room is booked')
 
-    return render(request, 'Site/booking_form.html', {'form':form})
+    return render(request, 'Site/booking_form.html', {
+        'form':form,
+        'hotel':pk
+    })
 
-
+def rooms_view(request, pk):
+    id = pk
+    hotel = request.POST['hotel']
+    from_ = request.POST['from_date']
+    to_ = request.POST['to_date']
+    booking = Booking.objects.create(
+        user = request.user,
+        room_id = id,
+        check_in = from_,
+        check_out = to_,
+        otel_id = hotel
+    )
+    booking.save()
+    booked_hotel_room = Hotel.objects.get(id=hotel)
+    booked_hotel_room.booked_rooms.add(booking)
+    booked_hotel_room.save()
+    return redirect('main')
 
